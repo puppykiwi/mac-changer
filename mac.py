@@ -1,4 +1,5 @@
 import subprocess
+import argparse
 import string
 import random
 import re
@@ -41,13 +42,19 @@ def change_macAddress(interface, new_macAddress):
     subprocess.call(f"sudo ifconfig {interface} up", shell=True)
 
 if __name__ == "__main__":
-    print("Welcome to Johnray's MAC address changer")
-    print()
-    interface = input("Enter the interface: ")
-    print()
 
-    current_macAddress = get_current_macAddress(interface)
-    print(f"Current MAC address: {current_macAddress}")
-    new_macAddress = get_random_macAddress()
+    parser = argparse.ArgumentParser(description="Johnray's MAC address changer for linux")
+    parser.add_argument("interface", help="The network interface name")
+    parser.add_argument("-r", "--random", action="store_true", help="Whether to generate a random MAC address")
+    parser.add_argument("-m", "--mac", help="The new MAC you want to change to")
+    args = parser.parse_args()
+    interface = args.interface
+    if args.random:
+        new_macAddress = get_random_macAddress()
+    elif args.mac:
+        new_macAddress = args.mac
+    old_macAddress = get_current_macAddress(interface)
+    print("[*] Old MAC address:", old_macAddress)
     change_macAddress(interface, new_macAddress)
-    print(f"New MAC address: {new_macAddress}")
+    new_macAddress = get_current_macAddress(interface)
+    print("[+] New MAC address:", new_macAddress)
