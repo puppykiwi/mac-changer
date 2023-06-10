@@ -15,12 +15,10 @@ def get_random_macAddress():
             else:
                 mac_address += random.choice(hexdigits)
         
-        # Add ":" after every 2 characters, though unnecessary for now
-        '''
+        
         if i != 5:
             mac_address += ":" 
-    print(mac_address)
-        '''
+    
     return mac_address
 
 def get_current_macAddress(interface):
@@ -28,7 +26,7 @@ def get_current_macAddress(interface):
     output = result.stdout.read().decode('utf-8')
     error = result.stderr.read().decode('utf-8')
     
-    current_macAddress = re.search("ether (.+) ", output).group().split()[1].strip() # regex to strip the address from the output of ifconfig
+    current_macAddress = re.search("ether (.+) ", output).group().split()[1].strip().upper() # regex to strip the address from the output of ifconfig
 
     if error == "":
         return current_macAddress
@@ -38,7 +36,18 @@ def get_current_macAddress(interface):
 
 def change_macAddress(interface, new_macAddress):
     #switch the device down, change the mac address, back up it comes
-    subprocess.call(f"ifconfig {interface} down", shell=True)
-    subprocess.call(f"ifconfig {interface} hw ether {new_macAddress}", shell=True)
-    subprocess.call(f"ifconfig {interface} up", shell=True)
+    subprocess.call(f"sudo ifconfig {interface} down", shell=True)
+    subprocess.call(f"sudo ifconfig {interface} hw ether {new_macAddress}", shell=True)
+    subprocess.call(f"sudo ifconfig {interface} up", shell=True)
 
+if __name__ == "__main__":
+    print("Welcome to Johnray's MAC address changer")
+    print()
+    interface = input("Enter the interface: ")
+    print()
+
+    current_macAddress = get_current_macAddress(interface)
+    print(f"Current MAC address: {current_macAddress}")
+    new_macAddress = get_random_macAddress()
+    change_macAddress(interface, new_macAddress)
+    print(f"New MAC address: {new_macAddress}")
