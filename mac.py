@@ -28,13 +28,17 @@ def get_current_macAddress(interface):
     output = result.stdout.read().decode('utf-8')
     error = result.stderr.read().decode('utf-8')
     
-    output = re.search("ether (.+) ", output).group().split()[1].strip() # regex to strip the address from the output of ifconfig
+    current_macAddress = re.search("ether (.+) ", output).group().split()[1].strip() # regex to strip the address from the output of ifconfig
 
     if error == "":
-        print(output)
-        return output
+        return current_macAddress
     else:
         print(error)
         return None
 
-get_current_macAddress("wlo1")
+def change_macAddress(interface, new_macAddress):
+    #switch the device down, change the mac address, back up it comes
+    subprocess.call(f"ifconfig {interface} down", shell=True)
+    subprocess.call(f"ifconfig {interface} hw ether {new_macAddress}", shell=True)
+    subprocess.call(f"ifconfig {interface} up", shell=True)
+
