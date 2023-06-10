@@ -3,7 +3,7 @@ import string
 import random
 import re
 
-def get_mac_address():
+def get_random_macAddress():
     hexdigits = ''.join(set(string.hexdigits.upper()))
     special_choice = "02468ACE"
 
@@ -21,7 +21,20 @@ def get_mac_address():
             mac_address += ":" 
     print(mac_address)
         '''
-
     return mac_address
 
-get_mac_address()
+def get_current_macAddress(interface):
+    result = subprocess.Popen(f"ifconfig {interface}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = result.stdout.read().decode('utf-8')
+    error = result.stderr.read().decode('utf-8')
+    
+    output = re.search("ether (.+) ", output).group().split()[1].strip() # regex to strip the address from the output of ifconfig
+
+    if error == "":
+        print(output)
+        return output
+    else:
+        print(error)
+        return None
+
+get_current_macAddress("wlo1")
