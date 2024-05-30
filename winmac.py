@@ -40,18 +40,6 @@ def get_random_macAddress():
 
 
 def change_macAddress(interface_name, new_mac):
-  """
-  Changes the MAC address of a network interface on Windows using PowerShell.
-
-  Args:
-      interface_name (str): The name of the network interface (e.g., "Wi-Fi").
-      new_mac (str): The new MAC address to set.
-
-  Raises:
-      ValueError: If the provided MAC address format is invalid.
-      RuntimeError: If there's an error during execution.
-  """
-
 
   # Get current MAC address (for informational purposes)
   current_mac = get_current_macAddress(interface_name)
