@@ -53,20 +53,20 @@ def change_macAddress(interface_name, new_mac):
   #   if result.returncode != 0:
   #     raise RuntimeError(f"Failed to disable network adapter: {result.stderr}")
 
-  result = subprocess.run(["powershell", "-Command", f"Get-NetAdapter -Name {interface_name} | Disable-NetAdapter"], capture_output=True, text=True, check=True)
+  result = subprocess.run(["powershell", "-Command", f"Disable-NetAdapter -Name {interface_name} -Confirm:$false "], capture_output=True, text=True, check=True)
   if result.returncode != 0:
       raise RuntimeError(f"Failed to disable network adapter: {result.stderr}")
   
   print("* Adapter Off *") #debug
 
   
-  result = subprocess.run(["powershell", "-Command", f"Set-NetAdapter -Name {interface_name} -MacAddress {new_mac}"], capture_output=True, text=True, check=True)
+  result = subprocess.run(["powershell", "-Command", f"Set-NetAdapter -Name {interface_name} -MacAddress {new_mac} -Confirm:$false "], capture_output=True, text=True, check=True)
   if result.returncode != 0:
     raise RuntimeError(f"Failed to set new MAC address: {result.stderr}")
   print("* Macaddress Changed *") #debug
 
   
-  result = subprocess.run(["powershell", "-Command", f"Get-NetAdapter -Name {interface_name} | Enable-NetAdapter"], capture_output=True, text=True, check=True)
+  result = subprocess.run(["powershell", "-Command", f"Enable-NetAdapter -Name {interface_name} -Confirm:$false "], capture_output=True, text=True, check=True)
   if result.returncode != 0:
     raise RuntimeError(f"Failed to enable network adapter: {result.stderr}")
   print("* Adapter On *") #debug
