@@ -98,10 +98,11 @@ if __name__ == "__main__":
         new_macAddress = get_random_macAddress()
     elif args.mac:
         new_macAddress = args.mac
+    else:
+        new_macAddress = get_random_macAddress()
 
     old_macAddress = get_current_macAddress(interface)
     print("[*] Old MAC address:", old_macAddress)
-    print("[+] New MAC address:", new_macAddress)
 
     change_macAddress(interface, new_macAddress)
 
