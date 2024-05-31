@@ -43,7 +43,7 @@ This Python script allows you to change the Media Access Control (MAC) address o
 
 **Notes**
 
-- Use ([winmac] (https://github.com/puppykiwi/mac-changer/winmac.py)) in windows machines and ([linmac] (https://github.com/puppykiwi/mac-changer/linmac.py)) for all other UNIX machines
+- Use [winmac](https://github.com/puppykiwi/mac-changer/winmac.py) for windows machines and [linmac](https://github.com/puppykiwi/mac-changer/linmac.py) for all other UNIX machines
 
 - Changing the MAC address might temporarily disrupt your network connection.
 
