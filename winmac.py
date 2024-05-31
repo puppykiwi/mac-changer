@@ -23,6 +23,7 @@ def get_random_macAddress():
         
         if i != 5:
             mac_address += ":" 
+    print(f"Random mac: {mac_address}")
     
     return mac_address
 
@@ -44,6 +45,7 @@ def change_macAddress(interface_name, new_mac):
   # Get current MAC address (for informational purposes)
   current_mac = get_current_macAddress(interface_name)
   print(f"Current MAC address of {interface_name}: {current_mac}")
+  print(f"New MAC address of {interface_name}: {new_mac}")
 
   # # Check network adapter status
   # result = subprocess.run(["powershell", "-Command", f"Get-NetAdapter -Name {interface_name} | Select-Object Status"], capture_output=True, text=True, check=True)
@@ -60,16 +62,20 @@ def change_macAddress(interface_name, new_mac):
   result = subprocess.run(["powershell", "-Command", f"Get-NetAdapter -Name {interface_name} | Disable-NetAdapter"], capture_output=True, text=True, check=True)
   if result.returncode != 0:
       raise RuntimeError(f"Failed to disable network adapter: {result.stderr}")
+  
+  print("Adapter Off") #debug
 
   # Set the new MAC address
   result = subprocess.run(["powershell", "-Command", f"Set-NetAdapter -Name {interface_name} -MacAddress {new_mac}"], capture_output=True, text=True, check=True)
-  if result.returncode != 0:
-    raise RuntimeError(f"Failed to set new MAC address: {result.stderr}")
+  # if result.returncode != 0:
+    # raise RuntimeError(f"Failed to set new MAC address: {result.stderr}")
+  print("Adapter Changed") #debug
 
   # Enable the network adapter
   result = subprocess.run(["powershell", "-Command", f"Get-NetAdapter -Name {interface_name} | Enable-NetAdapter"], capture_output=True, text=True, check=True)
   if result.returncode != 0:
     raise RuntimeError(f"Failed to enable network adapter: {result.stderr}")
+  print("Adapter On") #debug
 
   print(f"New MAC address of {interface_name}: {new_mac}")
 
@@ -95,6 +101,7 @@ if __name__ == "__main__":
 
     old_macAddress = get_current_macAddress(interface)
     print("[*] Old MAC address:", old_macAddress)
+    print("[+] New MAC address:", new_macAddress)
 
     change_macAddress(interface, new_macAddress)
 
