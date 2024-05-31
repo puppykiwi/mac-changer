@@ -23,7 +23,6 @@ def get_random_macAddress():
         
         if i != 5:
             mac_address += ":" 
-    print(f"Random mac: {mac_address}")
     
     return mac_address
 
@@ -42,11 +41,6 @@ def get_random_macAddress():
 
 def change_macAddress(interface_name, new_mac):
 
-  # Get current MAC address (for informational purposes)
-  current_mac = get_current_macAddress(interface_name)
-  print(f"Current MAC address of {interface_name}: {current_mac}")
-  print(f"New MAC address of {interface_name}: {new_mac}")
-
   # # Check network adapter status
   # result = subprocess.run(["powershell", "-Command", f"Get-NetAdapter -Name {interface_name} | Select-Object Status"], capture_output=True, text=True, check=True)
   # adapter_status = result.stdout.strip()
@@ -63,25 +57,23 @@ def change_macAddress(interface_name, new_mac):
   if result.returncode != 0:
       raise RuntimeError(f"Failed to disable network adapter: {result.stderr}")
   
-  print("Adapter Off") #debug
+  print("* Adapter Off *") #debug
 
-  # Set the new MAC address
+  
   result = subprocess.run(["powershell", "-Command", f"Set-NetAdapter -Name {interface_name} -MacAddress {new_mac}"], capture_output=True, text=True, check=True)
-  # if result.returncode != 0:
-    # raise RuntimeError(f"Failed to set new MAC address: {result.stderr}")
-  print("Adapter Changed") #debug
+  if result.returncode != 0:
+    raise RuntimeError(f"Failed to set new MAC address: {result.stderr}")
+  print("* Macaddress Changed *") #debug
 
-  # Enable the network adapter
+  
   result = subprocess.run(["powershell", "-Command", f"Get-NetAdapter -Name {interface_name} | Enable-NetAdapter"], capture_output=True, text=True, check=True)
   if result.returncode != 0:
     raise RuntimeError(f"Failed to enable network adapter: {result.stderr}")
-  print("Adapter On") #debug
-
-  print(f"New MAC address of {interface_name}: {new_mac}")
+  print("* Adapter On *") #debug
 
 
 if __name__ == "__main__":
-#   print(get_current_mac_address())
+    
     parser = argparse.ArgumentParser(description="Johnray's MAC address changer for linux")
     parser.add_argument("-i", "--interface", dest="interface", help="The network interface name", default="Ethernet")
     parser.add_argument("-r", "--random", action="store_true", help="Whether to generate a random MAC address")
