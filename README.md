@@ -10,7 +10,7 @@ This Python script allows you to change the Media Access Control (MAC) address o
 **Installation**
 
 1. **Prerequisites:**
-   - Python 3 ([python](https://www.python.org/downloads/))
+   - Python 3 or newer ([python](https://www.python.org/downloads/))
    - Administrator privileges are required to change the MAC address. (Use sudo in linmac and powershell admin  for winmac)
 
 2. **Clone the repository:**
